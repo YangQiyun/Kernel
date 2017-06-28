@@ -20,6 +20,7 @@
 #include "debug.h"
 #include "gdt.h"
 #include "idt.h"
+#include "timer.h"
 
 int kern_entry()
 {
@@ -31,8 +32,10 @@ int kern_entry()
 
 	printk_color(rc_black, rc_green, "Hello, OS kernel!%d\n",112);
 
+	init_timer(2017,7,30,23,59,58);
 
-	asm volatile ("int $0x3");
+
+	asm volatile ("sti");
 
 	return 0;
 }
