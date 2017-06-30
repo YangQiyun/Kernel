@@ -1,21 +1,3 @@
-/*
- * =====================================================================================
- *
- *       Filename:  idt.h
- *
- *    Description:  中断描述符表的定义
- *
- *        Version:  1.0
- *        Created:  2013年11月12日 20时10分55秒
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Hurley (LiuHuan), liuhuan1992@gmail.com
- *        Company:  Class 1107 of Computer Science and Technology
- *
- * =====================================================================================
- */
-
 #ifndef INCLUDE_IDT_H_
 #define INCLUDE_IDT_H_
 

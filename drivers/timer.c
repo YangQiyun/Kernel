@@ -1,21 +1,3 @@
-/*
- * =====================================================================================
- *
- *       Filename:  timer.c
- *
- *    Description:  PIT 相关
- *
- *        Version:  1.0
- *        Created:  2013年11月16日 11时27分11秒
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Hurley (LiuHuan), liuhuan1992@gmail.com
- *        Company:  Class 1107 of Computer Science and Technology
- *
- * =====================================================================================
- */
-
 #include "timer.h"
 #include "debug.h"
 #include "common.h"
