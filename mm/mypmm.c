@@ -17,11 +17,14 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 
+
 struct buddy {
 	uint32_t size;
 	uint32_t longest[1];
 };
 
+//直接使用剩余的没法分配进分配器的页空间作为分配器的管理内存
+static struct buddy self[PMM_PAGE_SIZE*10];//该值是用来存储节点多少,16384
 static uint32_t fixsize(uint32_t size) {//将底部的所有的0全都用1替换，最后再加1
 	for(uint32_t temp=1;temp!=268435456;temp*=2)
 	size |= size >> temp;
@@ -39,7 +42,7 @@ void buddy_new(struct buddy *self_first,uint32_t size) {
 	node_size = size * 2;
 
 	for (i = 0; i < 2 * size - 1; ++i) {
-		if (IS_POWER_OF_2(i + 1))
+		if (IS_POWER_OF_2(i + 1)) 
 			node_size /= 2;
 		self_first->longest[i] = node_size;
 	}
@@ -54,7 +57,7 @@ void show_memory_map()//打印处multiboot为我们找到的BIOS提供的内存�
 
 	mmap_entry_t *mmap = (mmap_entry_t *)mmap_addr;
 	for (mmap = (mmap_entry_t *)mmap_addr; (uint32_t)mmap < mmap_addr + mmap_length; mmap++) {
-		printk("base_addr = 0x%X%08X, length = 0x%X%08X, type = 0x%X\n",
+		printk_color(rc_black,rc_light_brown,"base_addr = 0x%X%08X, length = 0x%X%08X, type = 0x%X\n",
 			(uint32_t)mmap->base_addr_high, (uint32_t)mmap->base_addr_low,
 			(uint32_t)mmap->length_high, (uint32_t)mmap->length_low,
 			(uint32_t)mmap->type);
@@ -63,15 +66,17 @@ void show_memory_map()//打印处multiboot为我们找到的BIOS提供的内存�
 
 void init_pmm()
 {
+
 	mmap_entry_t *mmap_start_addr = (mmap_entry_t *)glb_mboot_ptr->mmap_addr;
 	mmap_entry_t *mmap_end_addr = (mmap_entry_t *)glb_mboot_ptr->mmap_addr + glb_mboot_ptr->mmap_length;
-
+	
 	mmap_entry_t *map_entry;
+
 	for (map_entry = mmap_start_addr; map_entry < mmap_end_addr; map_entry++) {//循环multi提供的内存块，进行遍历可用的块
 
 		// 如果是可用内存 ( 按照协议，1 表示可用内存，其它数字指保留区域 )
 		if (map_entry->type == 1 && map_entry->base_addr_low == 0x100000) {
-			
+
 			// 把内核结束位置到结束位置的内存段革除
 			uint32_t page_addr =mem_start_addr= map_entry->base_addr_low + (uint32_t)(kern_end - kern_start);
 			uint32_t length = map_entry->base_addr_low + map_entry->length_low;//该块的限界
@@ -84,11 +89,11 @@ void init_pmm()
 				temp += PMM_PAGE_SIZE;
 				mem_buff_count++;
 			}
-			//直接使用剩余的没法分配进分配器的页空间作为分配器的管理内存
-			self=temp-PMM_PAGE_SIZE*15;
+					
+			printk("%ddsfsdfsdfs\n",mem_buff_count);
+	
 			mem_buff_count=fixsize(mem_buff_count)/2;
 			buddy_new(self,mem_buff_count);
-			
 		}
 	}
 }

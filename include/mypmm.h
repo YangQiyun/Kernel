@@ -13,7 +13,7 @@
 
 
 struct buddy;
-struct buddy *self;//2^14
+//struct buddy *self;//2^14
 uint16_t mem_buff_count;//分配器内的页数
 uint32_t mem_start_addr;//可用内存起始地址
 void buddy_new(struct buddy *self_first,uint32_t size );
