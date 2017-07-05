@@ -80,6 +80,17 @@ void kern_init()
 	show_memory_map();	
 	init_pmm();
 
+<<<<<<< HEAD
+	//show_size();
+	//uint32_t temp1=pmm_alloc_page(4097),temp2=pmm_alloc_default();
+	//printk_color(rc_black,rc_brown,"alloc addr :%08x\n",temp1);
+	//printk_color(rc_black,rc_brown,"alloc addr :%08x\n",temp2);
+	//pmm_free(temp1);
+	//printk_color(rc_black,rc_red,"alloc addr :%08x\n",pmm_alloc_default());
+	
+	init_vmm();
+	test_malloc();
+=======
 	show_size();
 	uint32_t temp1=pmm_alloc_page(4097),temp2=pmm_alloc_default();
 	printk_color(rc_black,rc_brown,"alloc addr :%08x\n",temp1);
@@ -88,6 +99,7 @@ void kern_init()
 	printk_color(rc_black,rc_red,"alloc addr :%08x\n",pmm_alloc_default());
 	
 	init_vmm();
+>>>>>>> e6a3fc4d768963db6531aea84e4a3969e641ca23
 	while (1) {
 		asm volatile ("hlt");
 	}
