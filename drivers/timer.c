@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "common.h"
 #include "idt.h"
+#include "sched.h"
 
 typedef int bool;
 
@@ -12,6 +13,7 @@ unsigned long volatile jiffies; //全局变量jiffies
 
 void timer_callback(pt_regs *regs)
 {
+/*
 	static num=0;
 	++num;
 	if(num<100)
@@ -21,7 +23,8 @@ void timer_callback(pt_regs *regs)
 	++jiffies;
 	timer temp=flash_time();
 	printk_color(rc_black, rc_red, "Time: %d/%d/%d  %d:%d:%d\n",temp.year,temp.month,temp.day,temp.hour,temp.min,temp.second);
-	}
+	}*/
+	schedule();
 	
 }
 
@@ -124,4 +127,5 @@ void init_timer(int year,int month,int day,int hour,int min,int second)
 	// 分别写入低字节和高字节
 	outb(0x40, low);
 	outb(0x40, hign);
+
 }

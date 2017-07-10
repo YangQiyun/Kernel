@@ -3,6 +3,8 @@
 #include "debug.h"
 #include "malloc.h"
 
+#define PAGE_DEAL(size) (((size+(PMM_PAGE_SIZE-1))&~(PMM_PAGE_SIZE-1))/PMM_PAGE_SIZE)
+
 static uint32_t start_addr = START;
 
 void *kmalloc(uint32_t len)
@@ -10,8 +12,16 @@ void *kmalloc(uint32_t len)
 	uint32_t page=pmm_alloc_page(len);
 	//将申请到的物理内存对应到START起始的虚拟内存地址
 	uint32_t va=page-(uint32_t)kern_end+start_addr+PAGE_OFFSET;
-	map(pgd_kern, va, page, PAGE_PRESENT | PAGE_WRITE);
-	return (void*)va;
+uint32_t temp=va;
+for (int i=0;i<PAGE_DEAL(len);i++) {
+		
+		map(pgd_kern, va, page, PAGE_PRESENT | PAGE_WRITE);
+		page += PAGE_SIZE;
+		va +=PAGE_SIZE;
+	}
+	
+	//map(pgd_kern, va, page, PAGE_PRESENT | PAGE_WRITE);
+	return (void*)temp;
 }
 
 void kfree(void *p){

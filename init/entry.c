@@ -5,9 +5,11 @@
 #include "timer.h"
 #include "mypmm.h"
 #include "vmm.h"
+#include "task.h"
+#include "sched.h"
+#include "malloc.h"
 
-// 线程栈的大小,mypmm
-#define STACK_SIZE 8192
+
 
 // 内核初始化函数
 void kern_init();
@@ -16,7 +18,10 @@ void kern_init();
 multiboot_t *glb_mboot_ptr;
 
 // 开启分页机制之后的内核栈
-char kern_stack[STACK_SIZE];
+int8_t kern_stack[STACK_SIZE]  __attribute__ ((aligned(16)));
+
+// 内核栈的栈顶
+uint32_t kern_stack_top;
 
 // 内核使用的临时页表和页目录
 // 该地址必须是页对齐的地址，内存 0-640KB 肯定是空闲的
@@ -52,7 +57,7 @@ __attribute__((section(".init.text"))) void kern_entry()
 	asm volatile ("mov %0, %%cr0" : : "r" (cr0));
 	
 	// 切换内核栈
-	uint32_t kern_stack_top = ((uint32_t)kern_stack + STACK_SIZE) & 0xFFFFFFF0;
+	 kern_stack_top = ((uint32_t)kern_stack + STACK_SIZE) & 0xFFFFFFF0;
 	asm volatile ("mov %0, %%esp\n\t"
 			"xor %%ebp, %%ebp" : : "r" (kern_stack_top));
 
@@ -63,43 +68,55 @@ __attribute__((section(".init.text"))) void kern_entry()
 	kern_init();
 }
 
+
+int flag = 0;
+
+int thread(void *arg)
+{
+	while (1) {
+		if (flag == 1) {
+			printk_color(rc_black, rc_green, "B");
+			flag = 0;
+		}
+	}
+
+	return 0;
+}
+
+
 void kern_init()
 {
+	
 	init_debug();
+	
 	init_gdt();
 	init_idt();
 
 	console_clear();
-
+	
 	printk_color(rc_black, rc_green, "Hello, OS kernel!%d\n",112);
 
 	printk("kernel in memory start: 0x%08X\n", kern_start);
 	printk("kernel in memory end:   0x%08X\n", kern_end);
 	printk("kernel in memory used:   %d KB\n\n", (kern_end - kern_start) / 1024);
-	
+	init_timer(2017,7,10,16,52,0);
 	show_memory_map();	
 	init_pmm();
+	init_vmm();
+	init_sched();
 
-<<<<<<< HEAD
-	//show_size();
-	//uint32_t temp1=pmm_alloc_page(4097),temp2=pmm_alloc_default();
-	//printk_color(rc_black,rc_brown,"alloc addr :%08x\n",temp1);
-	//printk_color(rc_black,rc_brown,"alloc addr :%08x\n",temp2);
-	//pmm_free(temp1);
-	//printk_color(rc_black,rc_red,"alloc addr :%08x\n",pmm_alloc_default());
-	
-	init_vmm();
-	test_malloc();
-=======
-	show_size();
-	uint32_t temp1=pmm_alloc_page(4097),temp2=pmm_alloc_default();
-	printk_color(rc_black,rc_brown,"alloc addr :%08x\n",temp1);
-	printk_color(rc_black,rc_brown,"alloc addr :%08x\n",temp2);
-	pmm_free(temp1);
-	printk_color(rc_black,rc_red,"alloc addr :%08x\n",pmm_alloc_default());
-	
-	init_vmm();
->>>>>>> e6a3fc4d768963db6531aea84e4a3969e641ca23
+	kernel_thread(thread, NULL);
+
+	// 开启中断
+	 asm volatile ("sti");
+
+	while (1) {
+		if (flag == 0) {
+			printk_color(rc_black, rc_red, "A");
+			flag = 1;
+		}
+	}
+
 	while (1) {
 		asm volatile ("hlt");
 	}

@@ -4,6 +4,8 @@
 
 #include "multiboot.h"
 
+//内核线程栈大小位linux的8KB
+#define STACK_SIZE 8192
 
 // 支持的最大物理内存(512MB)
 #define PMM_MAX_SIZE 0x20000000
