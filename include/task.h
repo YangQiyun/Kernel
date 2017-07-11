@@ -1,20 +1,4 @@
-/*
- * =====================================================================================
- *
- *       Filename:  task.h
- *
- *    Description:  进程管理相关的定义
- *
- *        Version:  1.0
- *        Created:  2013年11月20日 09时18分41秒
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Hurley (LiuHuan), liuhuan1992@gmail.com
- *        Company:  Class 1107 of Computer Science and Technology
- *
- * =====================================================================================
- */
+
 
 #ifndef INCLUDE_TASK_H_
 #define INCLUDE_TASK_H_

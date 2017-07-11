@@ -1,20 +1,3 @@
-/*
- * =====================================================================================
- *
- *       Filename:  sched.h
- *
- *    Description:  内核的线程调度
- *
- *        Version:  1.0
- *        Created:  2013年11月22日 16时07分43秒
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Hurley (LiuHuan), liuhuan1992@gmail.com
- *        Company:  Class 1107 of Computer Science and Technology
- *
- * =====================================================================================
- */
 
 #ifndef INCLUDE_SCHEDULER_H_
 #define INCLUDE_SCHEDULER_H_

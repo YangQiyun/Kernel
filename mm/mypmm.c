@@ -90,7 +90,7 @@ void init_pmm()
 				mem_buff_count++;
 			}
 					
-			printk("%ddsfsdfsdfs\n",mem_buff_count);
+			printk("%d\n",mem_buff_count);
 	
 			mem_buff_count=fixsize(mem_buff_count)/2;
 			buddy_new(self,mem_buff_count);
