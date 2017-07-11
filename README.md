@@ -1,5 +1,6 @@
 # Kernel
  ![after adding virtual mem](http://i.imgur.com/PZ7Prj3.png)
+![](http://i.imgur.com/eUTfYKi.png)
 
 ----------
 
